@@ -5,7 +5,11 @@ using UnityEngine;
 public class CarPositionRecorder : MonoBehaviour
 {
     // public List<Vector3> carCoordinates;
+<<<<<<< HEAD
     public float captureInterval = 1.0f;
+=======
+    public float captureInterval = 15.0f;
+>>>>>>> 5bf37ec (Second commit)
     public string saveFileName = "/carCoordinates.txt";
 
     private float lastCaptureTime;
@@ -21,6 +25,7 @@ public class CarPositionRecorder : MonoBehaviour
         {
             Vector3 temp = transform.position;
             string filePath = Application.dataPath + saveFileName;
+<<<<<<< HEAD
             Debug.Log(filePath);
             Debug.Log(temp);
             if(!File.Exists(filePath))
@@ -28,6 +33,16 @@ public class CarPositionRecorder : MonoBehaviour
                 File.WriteAllText(filePath, "The player blob visited these random coordinates: \n\n");
             }
                 File.AppendAllText(filePath, "(" + temp.x + ", " + temp.y + ", " + temp.z + ")\n\n");
+=======
+            // Debug.Log(filePath);
+            // Debug.Log(temp);
+            // if(!File.Exists(filePath))
+            // {
+            //     File.WriteAllText(filePath, "The player blob visited these random coordinates: \n\n");
+            // }
+
+                File.AppendAllText(filePath, temp.x + ", " + temp.y + ", " + temp.z + "\n\n");
+>>>>>>> 5bf37ec (Second commit)
              lastCaptureTime = Time.time;
         }
     }

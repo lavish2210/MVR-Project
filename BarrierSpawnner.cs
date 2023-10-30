@@ -1,44 +1,68 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
-public class ObstacleGenerator : MonoBehaviour
+public class ObstacleSpawner : MonoBehaviour
 {
-    public List<GameObject> obstaclePrefabs;
-    public Transform carTransform;
-    public float spawnOffset = 50.0f; // Adjust this value as needed
-    public float spawnInterval = 1.5f;
+    public GameObject[] obstaclePrefabs;  // Array of different obstacle prefabs
+    public string coordinatesFilePath = "/home/sachin/Desktop/Brrr/College Docs/Sem7/MVR/FinalProject/Assets/carCoordinates.txt";    // The path to the text file containing coordinates
 
-    private float timeSinceLastSpawn = 0f;
-
-    void Update()
+    private void Start()
     {
-        // Get the car's current position
-        Vector3 carPosition = carTransform.position;
-
-        // Calculate the spawn position ahead of the car
-        Vector3 spawnPosition = carPosition + carTransform.forward * spawnOffset;
-
-        // Spawn the obstacle at the calculated position
-        if (Time.time > timeSinceLastSpawn + spawnInterval)
-        {
-            // Debug.Log(carPosition);
-            // Debug.Log(spawnPosition);
-            SpawnObstacle(spawnPosition);
-            timeSinceLastSpawn = Time.time;
-        }
+        List<Vector3> obstacleCoordinates = ReadCoordinatesFromFile(coordinatesFilePath);
+        SpawnObstacles(obstacleCoordinates);
     }
 
-    void SpawnObstacle(Vector3 position)
+    private List<Vector3> ReadCoordinatesFromFile(string filePath)
     {
-        if (obstaclePrefabs.Count == 0)
+        List<Vector3> coordinates = new List<Vector3>();
+
+        if (File.Exists(filePath))
         {
-            Debug.LogWarning("No obstacle prefabs assigned.");
-            return;
+            string[] lines = File.ReadAllLines(filePath);
+            int a = 0;
+            
+            foreach (string line in lines)
+            {
+                a++;
+                if(a%2!=0)continue;
+                
+                string[] parts = line.Split(',');
+
+                if (parts.Length == 3)
+                {
+                    float x = float.Parse(parts[0]);
+                    float y = float.Parse(parts[1]);
+                    float z = float.Parse(parts[2]);
+                    coordinates.Add(new Vector3(x, y, z));
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("Coordinates file not found: " + filePath);
         }
 
-        GameObject selectedObstaclePrefab = obstaclePrefabs[Random.Range(0, obstaclePrefabs.Count)];
+        return coordinates;
+    }
 
-        GameObject newObstacle = Instantiate(selectedObstaclePrefab, position, Quaternion.identity);
+    private void SpawnObstacles(List<Vector3> obstacleCoordinates)
+    {
+        foreach (Vector3 coordinate in obstacleCoordinates)
+        {
+            // Randomly select an obstacle prefab
+            GameObject obstaclePrefab = obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)];
+
+            if (obstaclePrefab != null)
+            {
+                // Instantiate the randomly selected obstacle at the specified coordinates
+                Instantiate(obstaclePrefab, coordinate, Quaternion.identity);
+            }
+            else
+            {
+                Debug.LogError("No obstacle prefabs available.");
+            }
+        }
     }
 }
