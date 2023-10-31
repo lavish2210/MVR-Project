@@ -24,13 +24,13 @@ public class RayCast : MonoBehaviour
 
         if (stoneRay && targets.Contains(StonehitInfo.collider.tag))
         {
-            Debug.Log("Ray touched " + StonehitInfo.collider.tag);
+            // Debug.Log("Ray touched " + StonehitInfo.collider.tag);
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * StonehitInfo.distance, Color.red);
         }
 
         if (SideRay && targets.Contains(SidehitInfo.collider.tag))
         {
-            Debug.Log("Ray touched " + SidehitInfo.collider.tag);
+            // Debug.Log("Ray touched " + SidehitInfo.collider.tag);
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * SidehitInfo.distance, Color.blue);
         }
 

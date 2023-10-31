@@ -388,6 +388,22 @@ namespace VehicleBehaviour {
             handbrake = h;
         }
 
+        public float GetTorque()
+        {
+            return (driveWheel[0].motorTorque / 602f);
+        }
+
+        public float GetSteeringAngle()
+        {
+            return (turnWheel[0].steerAngle / steerAngle);
+        }
+
+        public void AgentMove(Vector3 _move)
+        {
+            // Input from agent
+            transform.position = _move;
+        }
+
         // MULTIOSCONTROLS is another package I'm working on ignore it I don't know if it will get a release.
 #if MULTIOSCONTROLS
         private static MultiOSControls _controls;
